@@ -15,9 +15,10 @@
   "bugs": {
     "url": "https://github.com/NicoAdams/vee/issues"
   },
-  "devDependencies": {
+  "dependencies": {
     "electron": "^1.6.10",
-    "requirejs": "^2.3.3"
-  },
-  "dependencies": {}
+    "lodash": "^4.17.4",
+    "requirejs": "^2.3.3",
+    "victor": "^1.1.0"
+  }
 }
