@@ -67,4 +67,4 @@ Then `file2` would be an object with attributes `func1` and `func2`, available i
 For 2d vectors, I'm using the "victor" library, so if you see `new Victor(x,y)`, that's a 2d vector.
 
 So far the geometry library implements...
-* AABB geometry -- an AABB is a rectangle whose sides are along the x and y directions (no rotation allowed). The code can now calculate the minimum translation vector (mtv) between two AABBs: If 1 is overlapping with 2, the mtv shortest vector necessary to move 2 off of 1.
+* AABB geometry -- an AABB is a rectangle whose sides are along the x and y directions (no rotation allowed). The code can now calculate theminimum translation vector (mtv) between two AABBs: If 1 is overlapping with 2, the mtv shortest vector necessary to move 2 off of 1.

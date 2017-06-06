@@ -6,20 +6,26 @@ const canvas = canvasElement.getContext("2d")
 
 // Contains viewport info and methods
 const viewport = {
-  centerX: 0,
-  centerY: 0,
-  zoom: 1, // Pixels / in-game units,
-  aspectRatio: 1.8, // Ratio of game width to height
+  center: new Victor(0,0),
+  
+  // Compensates for screen size changes: Scree "100 units" across before zoom
+  standardScreenWidth: 100,
+  
+  // In-game zoom -- can be set moment-to-moment for cinematic effect
+  zoom: 1,
+  
+  // Ratio of game width to height
+  aspectRatio: 1.8, 
   init: function() {
     // Sets up the canvas
     viewport.respondToWindowResize();
 
-    // Handles browser resize
+    // Handles window resize
     window.onresize = function() {
       viewport.respondToWindowResize();
     }
   },
-  getCanvasContext: function() {
+  getCanvas: function() {
     return canvas;
   },
   clear: function() {
@@ -37,7 +43,7 @@ const viewport = {
   },
   
   screenDim: function() {
-    // Returns the width and height of the game playing area (screen)
+    // Returns the width and height of the game playing area (screen) in px
     if(viewport.windowWidth() == 0 || viewport.windowHeight() == 0)
     {
       return Victor(0,0);
@@ -57,7 +63,7 @@ const viewport = {
     return viewport.screenDim().y
   },
   screenLoc: function() {
-    // Returns the screen's upper-left corner coords
+    // Returns the screen's upper-left corner coords in the window
     if(viewport.screenWidth() == 0 || viewport.windowHeight() == 0)
     {
       return Victor(0,0);
@@ -77,33 +83,39 @@ const viewport = {
     return viewport.screenLoc().y;
   },
   
+  netZoom: function() {
+    // Returns the total zoom factor, accounting for
+    // - Screen size (should zoom out decrease when screen is smaller)
+    // - this.zoom (the in-game zoom factor)
+    return viewport.zoom * (viewport.screenWidth() / viewport.standardScreenWidth);
+  },
   left: function() {
     // Returns the game coord of the left screen edge
-    return viewport.centerX - (viewport.screenWidth() / 2) / viewport.zoom
+    return viewport.center.x - (viewport.screenWidth() / 2) / viewport.netZoom()
   },
   right: function() {
     // Returns the game coord of the right screen edge
-    return viewport.centerX + (viewport.screenWidth() / 2) / viewport.zoom
+    return viewport.center.x + (viewport.screenWidth() / 2) / viewport.netZoom()
   },
   bottom: function() {
     // Returns the game coord of the bottom screen edge
-    return -viewport.centerY - (viewport.screenHeight() / 2) / viewport.zoom
+    return -viewport.center.y - (viewport.screenHeight() / 2) / viewport.netZoom()
   },
   top: function() {
     // Returns the game coord of the top screen edge
-    return -viewport.centerY + (viewport.screenHeight() / 2) / viewport.zoom
+    return -viewport.center.y + (viewport.screenHeight() / 2) / viewport.netZoom()
   },
   
   toScreen: function(gameCoord) { 
     // Converts game coords to pixels
-    var xval = (gameCoord.x - viewport.left()) * viewport.zoom
-    var yval = (-gameCoord.y - viewport.bottom()) * viewport.zoom
+    var xval = (gameCoord.x - viewport.left()) * viewport.netZoom()
+    var yval = (-gameCoord.y - viewport.bottom()) * viewport.netZoom()
     return new Victor(xval, yval);
   },
   toGame: function(screenCoord) {
     // Converts pixels to game coords
-    var xval = screenCoord.x / viewport.zoom + viewport.left()
-    var yval = - (screenCoord.y / viewport.zoom + viewport.bottom())
+    var xval = screenCoord.x / viewport.netZoom() + viewport.left()
+    var yval = - (screenCoord.y / viewport.netZoom() + viewport.bottom())
     return [xval, yval]
   },
   
@@ -115,9 +127,8 @@ const viewport = {
     canvasElement.style.top = viewport.screenTop() + "px";
   },
   
-  setCenter: function(gameCoords) {
-    viewport.centerX = gameCoords.x;
-    viewport.centerY = gameCoords.y;
+  setCenter: function(gameCoord) {
+    viewport.center = gameCoord;
   },
   setZoom: function(zoom) {
     viewport.zoom = zoom;

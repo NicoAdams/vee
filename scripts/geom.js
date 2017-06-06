@@ -57,11 +57,11 @@ class Rect {
   get xRange() {return new Range(this.left, this.right)}
   get yRange() {return new Range(this.bottom, this.top)}
   
-  get corners() {return [Victor(this.loc.x, this.loc.y),
-                         Victor(this.loc.x + this.dim.x, this.loc.y),
-                         Victor(this.loc.x + this.dim.x, this.loc.y + this.dim.y),
-                         Victor(this.loc.x, this.loc.y + this.dim.y)
-                        ]};
+  get points() {return [Victor(this.loc.x, this.loc.y),
+                        Victor(this.loc.x + this.dim.x, this.loc.y),
+                        Victor(this.loc.x + this.dim.x, this.loc.y + this.dim.y),
+                        Victor(this.loc.x, this.loc.y + this.dim.y)
+                       ]};
   
   move(dLoc) {return new Rect(this.loc.add(dLoc), this.dim)}
   
