@@ -1,27 +1,28 @@
-console.log('gameWindow:', __dirname);
-
 const geom = require('./geom');
 const viewport = require('./viewport').viewport;
 const timing = require('./timing');
-
-const World = require('./world').World;
-
-const testLevel = require('./testLevel');
-
+const keyBindings = require('./keyBindings');
+const testWorld = require('./testLevel').world;
 const Victor = require('victor');
 
 viewport.init();
 
-const frameTimer = new timing.Timer();
-const gameTimer = new timing.Timer();
+const minUpdateTime = 0;
+const minDrawTime = 0;
+
+const frameTimer = new timing.Timer(minDrawTime);
+const gameTimer = new timing.Timer(minUpdateTime);
 
 frameTimer.start(() => {
-	viewport.clear();
-	testLevel.world.draw();
+  viewport.clear();
+  testWorld.draw();
 });
 gameTimer.start((dt) => {
-	testLevel.testObject.shape.move(new Victor(dt/70.,dt/70.));
-	if(testLevel.testObject.shape.bottom > 36) {
-		testLevel.testObject.shape.move(new Victor(-91, -91))
-	}
+  testWorld.step(dt);
 });
+
+// Any variable exported here will be accessible in the console
+// (It will be a property of the global variable "game")
+exports.testWorld = testWorld;
+exports.frameTimer = frameTimer;
+exports.gameTimer = gameTimer;

@@ -41,7 +41,7 @@ class Range {
   }
 }
 
-class Rect {
+class AABBRect {
   
   // loc = top-left corner
   constructor(loc, dim) {
@@ -63,14 +63,16 @@ class Rect {
                         Victor(this.loc.x, this.loc.y + this.dim.y)
                        ]};
   
-  move(dLoc) {return new Rect(this.loc.add(dLoc), this.dim)}
+  move(dLoc) {return new AABBRect(this.loc.add(dLoc), this.dim)}
   
-  mtv(that) {
+  getMtvCandidate(that) {
     const xMtv = new Victor(this.xRange.minTranslation(that.xRange), 0);
     const yMtv = new Victor(0, this.yRange.minTranslation(that.yRange));
     return _.minBy([xMtv, yMtv], v => (v.length()));
   }
 }
 
+
+
 exports.Range = Range;
-exports.Rect = Rect;
+exports.AABBRect = AABBRect;

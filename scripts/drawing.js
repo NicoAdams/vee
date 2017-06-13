@@ -8,7 +8,7 @@ function rgb(r,g,b) {
   return "rgb("+r+","+g+","+b+")";
 }
 
-function drawPoly(points, color="WHITE") {
+function fillPoly(points, color="WHITE") {
   const c = viewport.getCanvas();
   c.beginPath();
   
@@ -17,12 +17,12 @@ function drawPoly(points, color="WHITE") {
 
   let pos = _.head(screenPoints);
   c.moveTo(pos.x, pos.y);
-  _.forEach(_.tail(screenPoints), (pos) => {
-    c.lineTo(pos.x, pos.y);
-  });
+  
+  _.forEach(_.tail(screenPoints), (pos) => { c.lineTo(pos.x, pos.y) });
+  
   c.fillStyle = color;
   c.fill();
 }
 
 exports.rgb = rgb;
-exports.drawPoly = drawPoly;
+exports.fillPoly = fillPoly;
