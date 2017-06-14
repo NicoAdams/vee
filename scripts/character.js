@@ -27,12 +27,12 @@ class Character {
   constructor(shape = new AABBRect(new Victor(0, 0), new Victor(2, 4))) {
     
     // The game object representing the character for physics
-    this.object = new DynamicObject(shape, "WHITE", true);
+    this.object = new DynamicObject(shape, {color: "AliceBlue", collidable: true});
     
     // Immutable properties of the character
     this.properties = {
-      sideSpeed: 20 * physicsSettings.baseSpeed,
-      jumpSpeed: 2 * physicsSettings.baseSpeed,
+      sideSpeed: 30 * physicsSettings.baseSpeed,
+      jumpSpeed: 30 * physicsSettings.baseSpeed,
       groundedSideDecel: 1 * physicsSettings.baseSpeed,
       jumpingAccelGoingUp: 1 * physicsSettings.gravity,
       maxJumpTime: 400

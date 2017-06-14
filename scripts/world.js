@@ -22,7 +22,7 @@
 
 const _ = require('lodash');
 const util = require('./util');
-const resolveCollision = require('./collision').resolveCollision;
+const detectAndResolveCollision = require('./collision').detectAndResolveCollision;
 
 let currObjectId = 0;
 function getUniqueObjectId() {
@@ -67,7 +67,7 @@ exports.World = class {
   
   handleCollisions() {
     util.forEachPair(this.collidableObjects, (o1, o2) => {
-      resolveCollision(o1, o2);
+      detectAndResolveCollision(o1, o2);
     })
   }
   

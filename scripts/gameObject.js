@@ -2,14 +2,16 @@
 // Eventually this should include a path to an image or animation 
 
 const drawing = require('./drawing');
+const physicsSettings = require('./physicsSettings').physicsSettings;
 const Victor = require('victor');
 
 // Basic object just bundles a shape with a way of drawing that shape
 class GameObject {
-  constructor(shape, color, collidable = false) {
+  
+  constructor(shape, options) {
     this.shape = shape;
-    this.color = color;
-    this.collidable = collidable;
+    this.color = options.color || "WHITE";
+    this.collidable = options.collidable || false;
   }
   
   get isDynamic() {
@@ -29,14 +31,11 @@ class GameObject {
 
 // Object that handles Newtonian speed/accel with its "update" method
 class DynamicObject extends GameObject {
-  constructor(shape,
-              color,
-              collidable = false,
-              vel = new Victor(0,0),
-              accel = new Victor(0,0)) {
-    super(shape, color, collidable);
-    this.vel = vel;
-    this.accel = accel;
+  
+  constructor(shape, options) {
+    super(shape, options);
+    this.vel = options.vel || new Victor(0, 0);
+    this.accel = options.accel || new Victor(0, -physicsSettings.gravity);
   }
   
   get isDynamic() {
